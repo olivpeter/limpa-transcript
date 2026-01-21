@@ -26,7 +26,10 @@ let currentFileName = '';
 // --- Lógica de Limpeza ---
 function cleanTranscript(text) {
     const lines = text.split('\n');
-    const timestampRegex = /^\s*\d{2}:\d{2}:\d{2}:\d{2}\s*-\s*\d{2}:\d{2}:\d{2}:\d{2}\s*$/;
+    // Regex para formato Premiere: 00:00:00:00 - 00:00:00:00
+    const premiereRegex = /^\s*\d{2}:\d{2}:\d{2}:\d{2}\s*-\s*\d{2}:\d{2}:\d{2}:\d{2}\s*$/;
+    // Regex para formato Youtube: 0:00 ou 00:00 ou 0:00:00
+    const youtubeRegex = /^\s*\d{1,2}:\d{2}(?::\d{2})?\s*$/;
     
     const validLines = [];
 
@@ -34,7 +37,8 @@ function cleanTranscript(text) {
         const trimmedLine = line.trim();
 
         if (!trimmedLine) return; // Pula vazias
-        if (timestampRegex.test(trimmedLine)) return; // Pula timestamps
+        if (premiereRegex.test(trimmedLine)) return; // Pula timestamps Premiere
+        if (youtubeRegex.test(trimmedLine)) return; // Pula timestamps Youtube
         if (trimmedLine.toLowerCase() === 'unknown') return; // Pula 'Unknown'
 
         validLines.push(trimmedLine);
