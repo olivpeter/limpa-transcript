@@ -30,6 +30,8 @@ function cleanTranscript(text) {
     const premiereRegex = /^\s*\d{2}:\d{2}:\d{2}:\d{2}\s*-\s*\d{2}:\d{2}:\d{2}:\d{2}\s*$/;
     // Regex para formato Youtube: 0:00 ou 00:00 ou 0:00:00
     const youtubeRegex = /^\s*\d{1,2}:\d{2}(?::\d{2})?\s*$/;
+    // Regex para formato Whisper: 00:00:00.000 --> 00:00:00.000
+    const whisperRegex = /^\s*\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}\s*$/;
     
     const validLines = [];
 
@@ -39,7 +41,8 @@ function cleanTranscript(text) {
         if (!trimmedLine) return; // Pula vazias
         if (premiereRegex.test(trimmedLine)) return; // Pula timestamps Premiere
         if (youtubeRegex.test(trimmedLine)) return; // Pula timestamps Youtube
-        if (trimmedLine.toLowerCase() === 'unknown') return; // Pula 'Unknown'
+        if (whisperRegex.test(trimmedLine)) return; // Pula timestamps Whisper
+        if (trimmedLine.toLowerCase() === 'unknown') return; // Pula 'Unknown'  
 
         validLines.push(trimmedLine);
     });
